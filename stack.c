@@ -9,7 +9,7 @@ void init_stack(Stack *stack) {
 
 void push(Stack *stack, Token *token) {
     if (stack->top == stack->cap) {
-        size_t new_cap = stack->cap ? stack->cap * 2 : 16;
+        int new_cap = stack->cap ? stack->cap * 2 : 16;
         Token *new_tokens = realloc(stack->tokens, new_cap * sizeof(Token));
         if (new_tokens == NULL) {
             return;

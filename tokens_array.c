@@ -9,10 +9,10 @@ void init_array(TokensArray *array) {
 
 void append(TokensArray *array, Token *token) {
     if (array->end == array->cap) {
-        size_t new_cap = array->cap ? array->cap * 2 : 16;
+        int new_cap = array->cap ? array->cap * 2 : 16;
         Token *new_tokens = realloc(array->tokens, new_cap * sizeof(Token));
         if (new_tokens == NULL) {
-            return; // allocation failure leaves array unchanged
+            return;
         }
         array->tokens = new_tokens;
         array->cap = new_cap;

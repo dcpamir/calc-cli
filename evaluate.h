@@ -3,6 +3,6 @@
 
 #include "tokens_array.h"
 
-double evaluate_rpn(TokensArray *rpn_array);
+double evaluate_rpn(TokensArray *rpn_array, ErrorCodes *err_flag);
 
 #endif

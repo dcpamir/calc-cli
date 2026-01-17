@@ -3,7 +3,7 @@
 
 #include "tokens_array.h"
 
-TokensArray infix_to_postfix(TokensArray *array);
-size_t get_precedence(TokenType type);
+TokensArray infix_to_postfix(TokensArray *array, ErrorCodes *err_code);
+int get_precedence(TokenType type);
 
 #endif

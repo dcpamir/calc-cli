@@ -2,7 +2,6 @@
 #define LEXER_H
 
 #include <stdbool.h>
-#include "token_type.h"
 #include "tokens_array.h"
 
 typedef struct {
@@ -10,10 +9,9 @@ typedef struct {
     char *current;
 } Scanner;
 
-Token create_token(TokenType type, char c, size_t pos);
-Token create_token_num(TokenType type, double n, size_t pos);
-Token tokeniser(char *line);
-TokensArray scan_tokens(char *line);
-void skip_whitespace();
+Token create_token(TokenType type, char c, int pos);
+Token create_token_num(TokenType type, double n, int pos);
+Token tokeniser(char *line, int po, int *unary_expected, ErrorCodes *err_code);
+TokensArray scan_tokens(char *line, ErrorCodes *err_code);
 
 #endif

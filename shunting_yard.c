@@ -1,14 +1,13 @@
 #include "shunting_yard.h"
 #include "stack.h"
-#include "tokens_array.h"
 #include <stdlib.h>
 
-TokensArray infix_to_postfix(TokensArray *array) {
+TokensArray infix_to_postfix(TokensArray *array, ErrorCodes *err_code) {
     Stack stack;
     TokensArray rpn_array;
     init_array(&rpn_array);
     init_stack(&stack);
-    size_t i = 0;
+    int i = 0;
     while (array->tokens[i].type != TOK_EOF) {
         if (array->tokens[i].type == TOK_NUMBER) {
             append(&rpn_array, &array->tokens[i]);
@@ -21,7 +20,21 @@ TokensArray infix_to_postfix(TokensArray *array) {
                 Token op = pop(&stack);
                 append(&rpn_array, &op);
             }
-            pop(&stack);
+            if (stack.top > 0)
+                pop(&stack);
+            else {
+                Token err = {
+                    .pos = array->tokens[i].pos,
+                    .type = TOK_ERROR,
+                    .value.c = ')'
+                };
+                append(&rpn_array, &err);
+                *err_code = ERR_UNMATCHED_PAREN;
+                break;
+            }
+        }
+        else if (array->tokens[i].type == TOK_UMINUS) {
+            push(&stack, &array->tokens[i]);
         }
         else {
             while (stack.top > 0 && 
@@ -35,13 +48,24 @@ TokensArray infix_to_postfix(TokensArray *array) {
     }
     while (stack.top > 0) {
         Token op = pop(&stack);
-        append(&rpn_array, &op);
+        if (op.type != TOK_LPAREN)
+            append(&rpn_array, &op);
+        else {
+            Token err = {
+                .pos = op.pos,
+                .type = TOK_ERROR,
+                .value.c = '(',
+            };
+            append(&rpn_array, &err);
+            *err_code = ERR_UNMATCHED_PAREN;
+            break;
+        }
     }
     free_stack(&stack);
     return rpn_array;
 }
 
-size_t get_precedence(TokenType type) {
+int get_precedence(TokenType type) {
     switch (type) {
         case TOK_PLUS:
         case TOK_MINUS:
@@ -50,6 +74,8 @@ size_t get_precedence(TokenType type) {
         case TOK_SLASH:
         case TOK_MOD:
             return 2;
+        case TOK_UMINUS:
+            return 3;
         default:
             return 0;
     }

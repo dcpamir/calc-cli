@@ -2,11 +2,11 @@
 #define STACK_H
 
 #include <stdlib.h>
-#include "token.h"
+#include "tokens_array.h"
 
 typedef struct {
     Token *tokens;
-    size_t top, cap;
+    int top, cap;
 } Stack;
 
 void init_stack(Stack *stack);
