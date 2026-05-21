@@ -45,7 +45,12 @@ double evaluate_rpn(TokensArray *rpn_array, ErrorCodes *err_code) {
                 result = a.value.n / b.value.n;
                 break;
             case TOK_MOD:
-                result = (int)a.value.n % (int)b.value.n;
+                if (b.value.n == 0) {
+                    *err_code = ERR_DIVISION_BY_ZERO;
+                    break;
+                }
+                long long quotient = (long long)(a.value.n / b.value.n);
+                result = a.value.n - quotient * b.value.n;
                 break;
             default:
                 break;

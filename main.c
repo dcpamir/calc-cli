@@ -33,6 +33,7 @@ int main() {
             printf("Syntax Error: Unmatched Parenthesis\n");
             printf("> ");
             free_all(&rpn_array);
+            free_all(&array);
             err_code = ERR_NO_ERROR;
             continue;
         }

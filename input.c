@@ -5,6 +5,7 @@
 ssize_t get_line(char **line, FILE *fp) {
     int buffer = 8;
     int len = 0;
+    free(*line);
     *line = malloc(buffer);
     while (1) {
         if (fgets(*line + len, buffer - len, fp) == NULL) {
